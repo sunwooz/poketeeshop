@@ -6,6 +6,7 @@ require 'rails/all'
 # you've limited to :test, :development, or :production.
 Bundler.require(*Rails.groups)
 
+<<<<<<< HEAD
 module Pokeshop
   class Application < Rails::Application
     
@@ -21,6 +22,10 @@ module Pokeshop
       end
     end
 
+=======
+module Pokemap
+  class Application < Rails::Application
+>>>>>>> cd775b5ec0e6b23b8c805a3974bc911b65af8c7b
     # Settings in config/environments/* take precedence over those specified here.
     # Application configuration should go into files in config/initializers
     # -- all .rb files in that directory are automatically loaded.

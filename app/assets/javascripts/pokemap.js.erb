@@ -1,0 +1,158 @@
+var map;
+var watchID;
+var spritesheet;
+var spritesize;
+var icons;
+var styles = [
+      {
+        featureType: 'road',
+        elementType: 'geometry',
+        stylers: [
+          { color: '#647b74' },
+          { weight: 1.6 }
+        ]
+      }, {
+        featureType: 'road',
+        elementType: 'labels',
+        stylers: [
+          { saturation: -100 },
+          { invert_lightness: true }
+        ]
+      }, {
+        featureType: 'landscape',
+        elementType: 'geometry',
+        stylers: [
+          { hue: '#22FF6B' },
+          { saturation: 100 }
+        ]
+      }, {
+        featureType: 'poi',
+        elementType: 'geometry',
+        stylers: [
+          { visibility: 'off' }
+        ]
+      }
+    ]
+
+function initialize() {
+
+  var map;
+  var container = document.getElementById('map');
+  var mapOptions = {
+    zoom: 18,
+    center: { lat: 0, lng: 0 },
+    mapTypeId: google.maps.MapTypeId.ROADMAP,
+    styles: styles
+  };
+
+  map = new google.maps.Map(container, mapOptions);
+
+  window.setInterval(function() {
+    trackPosition();
+  }, 5000);
+
+  spritesheet = "<%= asset_path('pokemonsprite.png') %>";
+  spritesize = new google.maps.Size(80, 80);
+
+  var bulbasaur = newMarkerImage(0, 0)
+
+  var ivysaur = newMarkerImage(80, 0)
+
+  var venasaur = newMarkerImage(160, 0)
+
+  var charmander = newMarkerImage(240, 0)
+
+  var charmilion = newMarkerImage(320, 0)
+
+  icons = {
+    bulbasaur: {
+      icon: bulbasaur
+    },
+    ivysaur: {
+      icon: ivysaur
+    },
+    venasaur: {
+      icon: venasaur
+    },
+    charmander: {
+      icon: charmander
+    },
+    charmilion: {
+      icon: charmilion
+    }
+  };
+
+}
+
+function trackPosition(){
+  console.log('track');
+  if (navigator.geolocation) {
+    watchID =  navigator.geolocation.watchPosition(drawGoogleMap,handleError,{enableHighAccuracy: true});
+  } else {
+    document.getElementById('map').innerHTML = "Geolocation is not Supported for this browser/OS.";
+  }
+}
+
+function drawGoogleMap(position){
+  var container = document.getElementById('map');
+      
+  var latitude = position.coords.latitude;
+  var longitude = position.coords.longitude;
+  var map,
+      mapOptions = {
+        zoom: 18,
+        center: { lat: latitude, lng: longitude },
+        mapTypeId: google.maps.MapTypeId.ROADMAP,
+        styles: styles
+      };
+
+  map = new google.maps.Map(container, mapOptions);
+      
+  var geolocate = new google.maps.LatLng(latitude, longitude);
+
+  placeMarker(map, latitude, longitude);
+
+  google.maps.event.addListener(map, 'click', function(event) {
+    console.log('click');
+    placeMarker(map, event.latLng.lat(), event.latLng.lng());
+  });
+
+}
+
+function placeMarker(map, lat, lng) {
+  var marker = new google.maps.Marker({
+    position: { lat: lat, lng: lng },
+    map: map,
+    icon: icons["charmander"].icon
+  });
+}
+
+function newMarkerImage(x, y) {
+  return new google.maps.MarkerImage(spritesheet, spritesize, new google.maps.Point(x, y));
+}
+
+function handleError(error){
+  var container = document.getElementById('map-canvas');
+  switch(error.code) {
+      case error.PERMISSION_DENIED:
+          container.innerHTML = "User denied the request for Geolocation."
+          break;
+      case error.POSITION_UNAVAILABLE:
+          container.innerHTML = "Location information is unavailable."
+          break;
+      case error.TIMEOUT:
+          container.innerHTML = "The request to get user location timed out."
+          break;
+      case error.UNKNOWN_ERROR:
+          container.innerHTML = "An unknown error occurred."
+          break;
+  }
+}
+
+// function addMarker(feature) {
+//   var marker = new google.maps.Marker({
+//     position: feature.position,
+//     icon: icons[feature.type].icon,
+//     map: map
+//   });
+// }
