@@ -4,6 +4,8 @@
   <!-- </div> -->
 <%# end %>
 
+<link href='https://fonts.googleapis.com/css?family=Bitter:700' rel='stylesheet' type='text/css'>
+
 <div data-hook="homepage_products">
   <% cache(cache_key_for_products) do %>
     <%= render :partial => 'spree/shared/products', :locals => { :products => @products } %>
