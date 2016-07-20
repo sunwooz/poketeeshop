@@ -30,6 +30,7 @@ gem 'spree_gateway', '~> 3.1.0'
 gem 'rails_12factor'
 gem 'aws-sdk-v1'
 gem 'spree_braintree_vzero', github: 'spree-contrib/spree_braintree_vzero', branch: '3-1-stable'
+gem 'spree_mail_settings', github: 'spree-contrib/spree_mail_settings', branch: '3-1-stable'
 
 
 # Use ActiveModel has_secure_password
